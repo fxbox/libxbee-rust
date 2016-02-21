@@ -1,4 +1,10 @@
+#![feature(plugin)]
+// Make linter fail for every warning
+#![plugin(clippy)]
+#![deny(clippy)]
+
 #![allow(non_camel_case_types)]
+#![allow(enum_variant_names)]
 
 extern crate libc;
 extern crate va_list;
@@ -6,7 +12,8 @@ extern crate va_list;
 use libc::time_t;
 use libc::timespec;
 use va_list::VaList;
-use std::fs::File;
+//use std::fs::File;
+use libc::FILE;
 
 pub enum Struct_xbee { }
 pub enum Struct_xbee_con { }
@@ -18,7 +25,7 @@ pub enum Enum_xbee_conSleepStates {
     CON_SLEEP = 2,
 }
 #[repr(C)]
-#[derive(Copy)]
+#[derive(Copy, Clone)]
 pub struct Struct_xbee_conAddress {
     pub broadcast: ::std::os::raw::c_uchar,
     pub addr16_enabled: ::std::os::raw::c_uchar,
@@ -33,43 +40,43 @@ pub struct Struct_xbee_conAddress {
     pub cluster_enabled: ::std::os::raw::c_uchar,
     pub cluster_id: ::std::os::raw::c_ushort,
 }
-impl ::std::clone::Clone for Struct_xbee_conAddress {
+/*impl ::std::clone::Clone for Struct_xbee_conAddress {
     fn clone(&self) -> Self { *self }
-}
+}*/
 impl ::std::default::Default for Struct_xbee_conAddress {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
-#[derive(Copy)]
+#[derive(Copy, Clone)]
 #[allow(non_snake_case)]
 pub struct Struct_xbee_conInfo {
     pub countRx: ::std::os::raw::c_int,
     pub countTx: ::std::os::raw::c_int,
     pub lastRxTime: time_t,
 }
-impl ::std::clone::Clone for Struct_xbee_conInfo {
+/*impl ::std::clone::Clone for Struct_xbee_conInfo {
     fn clone(&self) -> Self { *self }
-}
+}*/
 impl ::std::default::Default for Struct_xbee_conInfo {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
-#[derive(Copy)]
+#[derive(Copy, Clone)]
 #[allow(non_snake_case)]
 pub struct Struct_xbee_conSettings {
     pub _bindgen_bitfield_1_: ::std::os::raw::c_uchar,
     pub _bindgen_bitfield_2_: ::std::os::raw::c_uchar,
     pub broadcastRadius: ::std::os::raw::c_uchar,
 }
-impl ::std::clone::Clone for Struct_xbee_conSettings {
+/*impl ::std::clone::Clone for Struct_xbee_conSettings {
     fn clone(&self) -> Self { *self }
-}
+}*/
 impl ::std::default::Default for Struct_xbee_conSettings {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub enum Struct_xbee_ll_head { }
 #[repr(C)]
-#[derive(Copy)]
+#[derive(Copy, Clone)]
 #[allow(non_snake_case)]
 pub struct Struct_xbee_pkt {
     pub xbee: *mut Struct_xbee,
@@ -87,9 +94,9 @@ pub struct Struct_xbee_pkt {
     pub dataLen: ::std::os::raw::c_int,
     pub data: [::std::os::raw::c_uchar; 1usize],
 }
-impl ::std::clone::Clone for Struct_xbee_pkt {
+/*impl ::std::clone::Clone for Struct_xbee_pkt {
     fn clone(&self) -> Self { *self }
-}
+}*/
 impl ::std::default::Default for Struct_xbee_pkt {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
@@ -277,9 +284,9 @@ extern "C" {
                                                             ::std::os::raw::c_int>)
      -> xbee_err;
     pub fn xbee_netStop(xbee: *mut Struct_xbee) -> xbee_err;
-    pub fn xbee_logTargetSet(xbee: *mut Struct_xbee, f: *mut File)
+    pub fn xbee_logTargetSet(xbee: *mut Struct_xbee, f: *mut FILE)
      -> xbee_err;
-    pub fn xbee_logTargetGet(xbee: *mut Struct_xbee, f: *mut *mut File)
+    pub fn xbee_logTargetGet(xbee: *mut Struct_xbee, f: *mut *mut FILE)
      -> xbee_err;
     pub fn xbee_logLevelSet(xbee: *mut Struct_xbee,
                             level: ::std::os::raw::c_int) -> xbee_err;
