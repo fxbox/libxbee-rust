@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["David Scravaglieri <david@scravaglieri.net>"]
 
 [dependencies]
-clippy = "0.0.41"
+clippy = "0.0.48"
 libc="0.2"
 va_list = "0.0.3"
 
