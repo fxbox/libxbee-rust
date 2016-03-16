@@ -32,7 +32,7 @@ pub enum Enum_xbee_conSleepStates {
     CON_SLEEP = 2,
 }
 #[repr(C)]
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub struct Struct_xbee_conAddress {
     pub broadcast: c_uchar,
     pub addr16_enabled: c_uchar,
@@ -48,9 +48,29 @@ pub struct Struct_xbee_conAddress {
     pub cluster_id: c_ushort,
 }
 
+/*
 impl Default for Struct_xbee_conAddress {
     fn default() -> Self { unsafe { zeroed() } }
+}*/
+
+impl Default for Struct_xbee_conAddress {
+    fn default() -> Self {
+        Struct_xbee_conAddress {broadcast : 0,
+                                addr16_enabled : 0,
+                                addr16 : [0; 2],
+                                addr64_enabled : 0,
+                                addr64 : [0; 8],
+                                endpoints_enabled : 0,
+                                endpoint_local : 0,
+                                endpoint_remote : 0,
+                                profile_enabled : 0,
+                                profile_id : 0,
+                                cluster_enabled : 0,
+                                cluster_id : 0}
+    }
 }
+
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[allow(non_snake_case)]
@@ -133,44 +153,10 @@ pub enum Enum_xbee_errors {
     XBEE_ECATCHALL = -28,
     XBEE_ESHUTDOWN = -29,
 }
+
 impl Display for Enum_xbee_errors {
     fn fmt(&self, f:&mut Formatter) -> Result{
-        use Enum_xbee_errors::*;
-        // The `f` value implements the `Write` trait, which is what the
-        // write! macro is expecting. Note that this formatting ignores the
-        // various flags provided to format strings.
-        write!(f, "{}", match *self {
-            XBEE_ENONE => "0",
-            XBEE_EUNKNOWN => "-1",
-            XBEE_ENOMEM => "-2",
-            XBEE_ESELECT => "-3",
-            XBEE_ESELECTINTERRUPTED => "-4",
-            XBEE_EEOF => "-5",
-            XBEE_EIO => "-6",
-            XBEE_ESEMAPHORE => "-7",
-            XBEE_EMUTEX => "-8",
-            XBEE_ETHREAD => "-9",
-            XBEE_ELINKEDLIST => "-10",
-            XBEE_ESETUP => "-11",
-            XBEE_EMISSINGPARAM => "-12",
-            XBEE_EINVAL => "-13",
-            XBEE_ERANGE => "-14",
-            XBEE_ELENGTH => "-15",
-            XBEE_EFAILED => "-18",
-            XBEE_ETIMEOUT => "-17",
-            XBEE_EWOULDBLOCK => "-16",
-            XBEE_EINUSE => "-19",
-            XBEE_EEXISTS => "-20",
-            XBEE_ENOTEXISTS => "-21",
-            XBEE_ENOFREEFRAMEID => "-22",
-            XBEE_ESTALE => "-23",
-            XBEE_ENOTIMPLEMENTED => "-24",
-            XBEE_ETX => "-25",
-            XBEE_EREMOTE => "-26",
-            XBEE_ESLEEPING => "-27",
-            XBEE_ECATCHALL => "-28",
-            XBEE_ESHUTDOWN => "-29",
-        })
+        write!(f, "{}", *self as i32)
     }
 }
 
