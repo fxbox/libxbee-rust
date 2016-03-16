@@ -20,6 +20,7 @@ use std::option::Option;
 use std::default::Default;
 use va_list::VaList;
 use libc::FILE;
+use std::fmt::*;
 
 pub enum Struct_xbee { }
 pub enum Struct_xbee_con { }
@@ -98,7 +99,7 @@ pub struct Struct_xbee_pkt {
 impl Default for Struct_xbee_pkt {
     fn default() -> Self { unsafe { zeroed() } }
 }
-#[derive(Display, Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
 #[repr(i32)]
 pub enum Enum_xbee_errors {
     XBEE_ENONE = 0,
@@ -132,6 +133,47 @@ pub enum Enum_xbee_errors {
     XBEE_ECATCHALL = -28,
     XBEE_ESHUTDOWN = -29,
 }
+impl Display for Enum_xbee_errors {
+    fn fmt(&self, f:&mut Formatter) -> Result{
+        use Enum_xbee_errors::*;
+        // The `f` value implements the `Write` trait, which is what the
+        // write! macro is expecting. Note that this formatting ignores the
+        // various flags provided to format strings.
+        write!(f, "{}", match *self {
+            XBEE_ENONE => "0",
+            XBEE_EUNKNOWN => "-1",
+            XBEE_ENOMEM => "-2",
+            XBEE_ESELECT => "-3",
+            XBEE_ESELECTINTERRUPTED => "-4",
+            XBEE_EEOF => "-5",
+            XBEE_EIO => "-6",
+            XBEE_ESEMAPHORE => "-7",
+            XBEE_EMUTEX => "-8",
+            XBEE_ETHREAD => "-9",
+            XBEE_ELINKEDLIST => "-10",
+            XBEE_ESETUP => "-11",
+            XBEE_EMISSINGPARAM => "-12",
+            XBEE_EINVAL => "-13",
+            XBEE_ERANGE => "-14",
+            XBEE_ELENGTH => "-15",
+            XBEE_EFAILED => "-18",
+            XBEE_ETIMEOUT => "-17",
+            XBEE_EWOULDBLOCK => "-16",
+            XBEE_EINUSE => "-19",
+            XBEE_EEXISTS => "-20",
+            XBEE_ENOTEXISTS => "-21",
+            XBEE_ENOFREEFRAMEID => "-22",
+            XBEE_ESTALE => "-23",
+            XBEE_ENOTIMPLEMENTED => "-24",
+            XBEE_ETX => "-25",
+            XBEE_EREMOTE => "-26",
+            XBEE_ESLEEPING => "-27",
+            XBEE_ECATCHALL => "-28",
+            XBEE_ESHUTDOWN => "-29",
+        })
+    }
+}
+
 pub type xbee_err = Enum_xbee_errors;
 pub type xbee_t_eofCallback =
     Option<unsafe extern "C" fn(xbee: *mut Struct_xbee,
