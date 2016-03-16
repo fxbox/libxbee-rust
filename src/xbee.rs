@@ -6,6 +6,9 @@
 #![allow(non_camel_case_types)]
 #![allow(enum_variant_names)]
 
+#![feature(custom_derive)]
+#![allow(unused_attributes)]
+
 extern crate libc;
 extern crate va_list;
 
@@ -95,7 +98,7 @@ pub struct Struct_xbee_pkt {
 impl Default for Struct_xbee_pkt {
     fn default() -> Self { unsafe { zeroed() } }
 }
-#[derive(Clone, Copy)]
+#[derive(Display, Debug, Clone, Copy, Eq, PartialEq)]
 #[repr(i32)]
 pub enum Enum_xbee_errors {
     XBEE_ENONE = 0,
